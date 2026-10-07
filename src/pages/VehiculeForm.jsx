@@ -12,6 +12,8 @@ const VIDE = {
   carrosserie: '',
   energie: '',
   boite: '',
+  email_proprietaire: '',
+  client_id: '',
 };
 
 function VehiculeForm() {
@@ -20,8 +22,13 @@ function VehiculeForm() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState(VIDE);
+  const [clients, setClients] = useState([]);
   const [chargement, setChargement] = useState(estEdition);
   const [erreur, setErreur] = useState('');
+
+  useEffect(() => {
+    api.getClientsAll().then(setClients).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (estEdition) {
@@ -41,10 +48,11 @@ function VehiculeForm() {
     e.preventDefault();
     setErreur('');
     try {
+      const donnees = { ...form, client_id: form.client_id || null };
       if (estEdition) {
-        await api.updateVehicule(id, form);
+        await api.updateVehicule(id, donnees);
       } else {
-        await api.createVehicule(form);
+        await api.createVehicule(donnees);
       }
       navigate('/vehicules');
     } catch {
@@ -112,6 +120,19 @@ function VehiculeForm() {
           <input className="form-control" name="boite" value={form.boite} onChange={handleChange} required />
         </div>
         {erreur && <p className="text-danger">{erreur}</p>}
+        <div className="mb-3">
+          <label className="form-label">Email du propriétaire (optionnel, pour les notifications)</label>
+          <input type="email" className="form-control" name="email_proprietaire" value={form.email_proprietaire || ''} onChange={handleChange} />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Client propriétaire (optionnel, pour l'espace client)</label>
+          <select className="form-select" name="client_id" value={form.client_id || ''} onChange={handleChange}>
+            <option value="">-- Aucun --</option>
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>{c.prenom} {c.nom}</option>
+            ))}
+          </select>
+        </div>
         <div className="d-flex gap-2">
           <button type="submit" className="btn btn-primary">{estEdition ? 'Enregistrer' : 'Créer'}</button>
           <Link to="/vehicules" className="btn btn-secondary">Annuler</Link>

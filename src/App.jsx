@@ -14,6 +14,16 @@ import VehiculeForm from './pages/VehiculeForm';
 import TechnicienForm from './pages/TechnicienForm';
 import ReparationForm from './pages/ReparationForm';
 import Footer from './components/Footer';
+import PiecesList from './pages/PiecesList';
+import PieceDetail from './pages/PieceDetail';
+import PieceForm from './pages/PieceForm';
+import FacturesList from './pages/FacturesList';
+import FactureDetail from './pages/FactureDetail';
+import RegisterClient from './pages/RegisterClient';
+import ClientDashboard from './pages/ClientDashboard';
+import RendezVousForm from './pages/RendezVousForm';
+import RendezVousAdmin from './pages/RendezVousAdmin';
+import Statistiques from './pages/Statistiques';
 
 function estConnecte() {
   return !!sessionStorage.getItem('token');
@@ -21,6 +31,18 @@ function estConnecte() {
 
 function PageProtegee({ role, onLogout, children }) {
   if (!estConnecte()) return <Navigate to="/login" />;
+  return (
+    <>
+      <Header role={role} onLogout={onLogout} />
+      <main className="app-content">{children}</main>
+      <Footer />
+    </>
+  );
+}
+
+function PageClient({ role, onLogout, children }) {
+  if (!estConnecte()) return <Navigate to="/login" />;
+  if (role !== 'client') return <Navigate to="/vehicules" />;
   return (
     <>
       <Header role={role} onLogout={onLogout} />
@@ -45,6 +67,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/inscription" element={<RegisterClient onLogin={handleLogin} />} />
         <Route
           path="/vehicules"
           element={
@@ -52,7 +75,7 @@ function App() {
               <VehiculesList role={role} />
             </PageProtegee>
           }
-      
+
           />
           <Route
   path="/vehicules/:id/modifier"
@@ -95,7 +118,7 @@ function App() {
   }
 />
 <Route
-  
+
   path="/techniciens/:id/modifier"
   element={
     <PageProtegee role={role} onLogout={handleLogout}>
@@ -137,11 +160,8 @@ function App() {
 />
 <Route
   path="/reparations/:id"
-  element={
-    <PageProtegee role={role} onLogout={handleLogout}>
-      <ReparationDetail />
-    </PageProtegee>
-  }
+  element={<PageProtegee role={role} onLogout={handleLogout}><ReparationDetail role={role} /></PageProtegee>}
+
 />
 <Route
   path="/utilisateurs"
@@ -151,9 +171,68 @@ function App() {
     </PageProtegee>
   }
 />
+<Route
+  path="/pieces/nouvelle"
+  element={<PageProtegee role={role} onLogout={handleLogout}><PieceForm /></PageProtegee>}
+/>
+<Route
+  path="/pieces/:id/modifier"
+  element={<PageProtegee role={role} onLogout={handleLogout}><PieceForm /></PageProtegee>}
+/>
+<Route
+  path="/pieces/:id"
+  element={<PageProtegee role={role} onLogout={handleLogout}><PieceDetail /></PageProtegee>}
+/>
+<Route
+  path="/pieces"
+  element={<PageProtegee role={role} onLogout={handleLogout}><PiecesList role={role} /></PageProtegee>}
+/>
+<Route
+  path="/factures"
+  element={<PageProtegee role={role} onLogout={handleLogout}><FacturesList /></PageProtegee>}
+/>
+<Route
+  path="/factures/:id"
+  element={<PageProtegee role={role} onLogout={handleLogout}><FactureDetail role={role} /></PageProtegee>}
+/>
+
+<Route
+  path="/client"
+  element={
+    <PageClient role={role} onLogout={handleLogout}>
+      <ClientDashboard />
+    </PageClient>
+  }
+/>
+<Route
+  path="/client/rendez-vous/nouveau"
+  element={
+    <PageClient role={role} onLogout={handleLogout}>
+      <RendezVousForm />
+    </PageClient>
+  }
+/>
+<Route
+  path="/rendez-vous"
+  element={
+    <PageProtegee role={role} onLogout={handleLogout}>
+      <RendezVousAdmin />
+    </PageProtegee>
+  }
+/>
+<Route
+  path="/statistiques"
+  element={
+    <PageProtegee role={role} onLogout={handleLogout}>
+      <Statistiques />
+    </PageProtegee>
+  }
+/>
         <Route path="/" element={<Navigate to="/vehicules" />} />
       </Routes>
     </BrowserRouter>
+
+
   );
 }
 

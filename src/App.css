@@ -1,0 +1,136 @@
+/* ========================================================
+   GarageConnect — identité visuelle
+   Palette "atelier" : graphite + ambre, sur fond gris froid.
+   Ces variables redéfinissent les couleurs de Bootstrap :
+   tous les btn-*, bg-*, badge, text-* existants en héritent
+   automatiquement, sans modifier chaque page une par une.
+   ======================================================== */
+
+:root {
+  --bs-body-bg: #f3f4f5;
+  --bs-body-color: #22262b;
+  --bs-body-font-family: 'Inter', system-ui, sans-serif;
+
+  --bs-primary: #f0a202;
+  --bs-primary-rgb: 240, 162, 2;
+
+  --bs-warning: #f0a202;
+  --bs-warning-rgb: 240, 162, 2;
+
+  --bs-success: #2f6f4e;
+  --bs-success-rgb: 47, 111, 78;
+
+  --bs-danger: #b23a2e;
+  --bs-danger-rgb: 178, 58, 46;
+
+  --bs-info: #3e6d9c;
+  --bs-info-rgb: 62, 109, 156;
+
+  --bs-secondary: #6b7280;
+  --bs-secondary-rgb: 107, 114, 128;
+
+  --bs-dark: #22262b;
+  --bs-dark-rgb: 34, 38, 43;
+
+  --bs-link-color: #c77f00;
+  --bs-link-hover-color: #a66700;
+
+  --bs-focus-ring-color: rgba(240, 162, 2, 0.4);
+}
+
+body {
+  background-color: var(--bs-body-bg);
+}
+
+/* Titres : police condensée, identité "plaque d'atelier" */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Oswald', system-ui, sans-serif;
+  font-weight: 600;
+  color: #1a1d21;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: 1.85rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background-color: var(--bs-dark) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+  font-family: 'Oswald', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  border-bottom: 3px solid var(--bs-primary);
+  padding-bottom: 4px;
+  color: #fff !important;
+}
+
+.navbar .nav-link {
+  color: rgba(255, 255, 255, 0.75) !important;
+  transition: color 0.15s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #fff !important;
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+.btn-primary,
+.btn-warning {
+  color: #1a1d21;
+}
+
+/* ---------- Cartes statistiques : accent latéral au lieu de bordure complète ---------- */
+.stat-card {
+  border: 1px solid #e5e5e7;
+  border-left: 4px solid var(--bs-secondary);
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.stat-card.accent-primary { border-left-color: var(--bs-primary); }
+.stat-card.accent-success { border-left-color: var(--bs-success); }
+.stat-card.accent-danger  { border-left-color: var(--bs-danger); }
+.stat-card.accent-warning { border-left-color: var(--bs-warning); }
+.stat-card.accent-info    { border-left-color: var(--bs-info); }
+.stat-card.accent-secondary { border-left-color: var(--bs-secondary); }
+
+/* ---------- Tableaux ---------- */
+.table > :not(caption) > thead > tr > th,
+.table thead th {
+  background-color: var(--bs-dark) !important;
+  color: #fff !important;
+  font-weight: 500;
+  border-color: var(--bs-dark) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: #eceef0;
+}
+
+/* ---------- Contenu principal ---------- */
+.app-content {
+  min-height: calc(100vh - 140px);
+  padding-bottom: 2rem;
+}
+/* ---------- Responsive : tableaux scrollables sur mobile ---------- */
+@media (max-width: 767.98px) {
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

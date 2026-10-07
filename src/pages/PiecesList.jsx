@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 
-function TechniciensList({ role }) {
-  const [techniciens, setTechniciens] = useState([]);
+function PiecesList({ role }) {
+  const [pieces, setPieces] = useState([]);
   const [recherche, setRecherche] = useState('');
   const [page, setPage] = useState(1);
   const [dernierPage, setDernierPage] = useState(1);
@@ -13,13 +13,13 @@ function TechniciensList({ role }) {
   function charger(termeRecherche = '', numeroPage = 1) {
     setChargement(true);
     api
-      .getTechniciens(termeRecherche, numeroPage)
+      .getPieces(termeRecherche, numeroPage)
       .then((data) => {
-        setTechniciens(data.data);
+        setPieces(data.data);
         setPage(data.current_page);
         setDernierPage(data.last_page);
       })
-      .catch(() => setErreur('Impossible de charger les techniciens.'))
+      .catch(() => setErreur('Impossible de charger les pièces.'))
       .finally(() => setChargement(false));
   }
 
@@ -41,8 +41,8 @@ function TechniciensList({ role }) {
   }
 
   async function handleDelete(id) {
-    if (!confirm('Supprimer ce technicien ?')) return;
-    await api.deleteTechnicien(id);
+    if (!confirm('Supprimer cette pièce ?')) return;
+    await api.deletePiece(id);
     charger(recherche, page);
   }
 
@@ -51,10 +51,10 @@ function TechniciensList({ role }) {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1>Liste des techniciens</h1>
+        <h1>Stock de pièces</h1>
         {role === 'admin' && (
-          <Link to="/techniciens/nouveau" className="btn btn-success">
-            + Ajouter un technicien
+          <Link to="/pieces/nouvelle" className="btn btn-success">
+            + Ajouter une pièce
           </Link>
         )}
       </div>
@@ -63,7 +63,7 @@ function TechniciensList({ role }) {
         <input
           type="text"
           className="form-control me-2"
-          placeholder="Rechercher par nom, prénom ou spécialité"
+          placeholder="Rechercher par nom ou référence"
           value={recherche}
           onChange={(e) => setRecherche(e.target.value)}
         />
@@ -77,25 +77,35 @@ function TechniciensList({ role }) {
           <table className="table table-striped table-hover">
             <thead>
               <tr>
+                <th>Référence</th>
                 <th>Nom</th>
-                <th>Prénom</th>
-                <th>Spécialité</th>
+                <th>Stock</th>
+                <th>Prix unitaire</th>
+                <th>Statut</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {techniciens.map((t) => (
-                <tr key={t.id}>
-                  <td>{t.nom}</td>
-                  <td>{t.prenom}</td>
-                  <td>{t.specialite}</td>
+              {pieces.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.reference}</td>
+                  <td>{p.nom}</td>
+                  <td>{p.quantite_stock}</td>
+                  <td>{Number(p.prix_unitaire).toLocaleString()} FCFA</td>
+                  <td>
+                    {p.en_alerte ? (
+                      <span className="badge bg-danger">Stock bas</span>
+                    ) : (
+                      <span className="badge bg-success">OK</span>
+                    )}
+                  </td>
                   <td>
                     <div className="d-flex gap-1">
-                      <Link to={`/techniciens/${t.id}`} className="btn btn-primary btn-sm">Voir</Link>
+                      <Link to={`/pieces/${p.id}`} className="btn btn-primary btn-sm">Voir</Link>
                       {role === 'admin' && (
                         <>
-                          <Link to={`/techniciens/${t.id}/modifier`} className="btn btn-warning btn-sm">Modifier</Link>
-                          <button onClick={() => handleDelete(t.id)} className="btn btn-danger btn-sm">Supprimer</button>
+                          <Link to={`/pieces/${p.id}/modifier`} className="btn btn-warning btn-sm">Modifier</Link>
+                          <button onClick={() => handleDelete(p.id)} className="btn btn-danger btn-sm">Supprimer</button>
                         </>
                       )}
                     </div>
@@ -120,4 +130,4 @@ function TechniciensList({ role }) {
   );
 }
 
-export default TechniciensList;
+export default PiecesList;

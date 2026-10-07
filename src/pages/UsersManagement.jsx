@@ -24,7 +24,7 @@ function UsersManagement() {
 
   useEffect(() => {
     chargerUsers();
-    api.getTechniciens().then(setTechniciens).catch(() => {});
+    api.getTechniciensAll().then(setTechniciens).catch(() => {});
   }, []);
 
   async function handleCreate(e) {

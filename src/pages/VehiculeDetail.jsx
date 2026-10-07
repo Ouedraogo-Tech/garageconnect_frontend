@@ -10,7 +10,7 @@ function VehiculeDetail() {
   const [erreur, setErreur] = useState('');
 
   useEffect(() => {
-    Promise.all([api.getVehicule(id), api.getReparations()])
+    Promise.all([api.getVehicule(id), api.getReparationsAll()])
       .then(([vehiculeData, reparationsData]) => {
         setVehicule(vehiculeData);
         setReparations(reparationsData.filter((r) => r.vehicule_id === Number(id)));
@@ -30,7 +30,8 @@ function VehiculeDetail() {
         <div className="card-body">
           <p className="mb-1"><strong>Immatriculation :</strong> {vehicule.immatriculation}</p>
           <p className="mb-1">{vehicule.couleur} — {vehicule.annee} — {vehicule.kilometrage} km</p>
-          <p className="mb-0">{vehicule.carrosserie} · {vehicule.energie} · {vehicule.boite}</p>
+          <p className="mb-1">{vehicule.carrosserie} · {vehicule.energie} · {vehicule.boite}</p>
+          <p className="mb-0"><strong>Email du propriétaire :</strong> {vehicule.email_proprietaire || 'Non renseigné'}</p>
         </div>
       </div>
 

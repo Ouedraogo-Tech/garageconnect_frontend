@@ -19,21 +19,20 @@ function Login({ onLogin }) {
       sessionStorage.setItem('token', data.token);
       sessionStorage.setItem('role', data.role);
       sessionStorage.setItem('name', data.name);
+      sessionStorage.setItem('technicienId', data.technicien_id ?? '');
+      sessionStorage.setItem('clientId', data.client_id ?? '');
       onLogin(data.role);
-      navigate('/vehicules');
+
+      if (data.role === 'client') {
+        navigate('/client');
+      } else {
+        navigate('/vehicules');
+      }
     } catch {
       setErreur('Identifiants invalides.');
     } finally {
       setChargement(false);
     }
-
-    const data = await api.login(email, password);
-sessionStorage.setItem('token', data.token);
-sessionStorage.setItem('role', data.role);
-sessionStorage.setItem('name', data.name);
-sessionStorage.setItem('technicienId', data.technicien_id ?? '');
-onLogin(data.role);
-navigate('/vehicules');
   }
 
   return (
@@ -66,6 +65,9 @@ navigate('/vehicules');
         <button type="submit" className="btn btn-primary w-100" disabled={chargement}>
           {chargement ? 'Connexion...' : 'Se connecter'}
         </button>
+        <p className="text-center mt-3 mb-0">
+          Pas encore de compte client ? <a href="/inscription">Inscrivez-vous</a>
+        </p>
       </form>
     </div>
   );

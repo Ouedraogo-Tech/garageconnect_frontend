@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
 
+
 function TechnicienDetail() {
   const { id } = useParams();
   const [technicien, setTechnicien] = useState(null);
